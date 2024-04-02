@@ -7,7 +7,6 @@ import { TagsStateType } from './services/enums';
 import { ControlPanelComponent } from './Contol-Panel';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { teal, lime } from '@mui/material/colors';
-import CssBaseline from '@mui/material/CssBaseline';
 
 function App() {
   const [data, setTags] = useRecoilState<TagsStateType>(tagsState);
