@@ -3,7 +3,9 @@
   box-shadow: inset rgba(0, 150, 136, 1);
   /* background-color: rgba(0, 150, 136, 0.1);
   background: linear-gradient(to bottom, rgba(0, 150, 136, 0.3), rgba(94, 134, 94, 0.3)) */
-
+  font-family: -apple-system, BlinkMacSystemFont, 'Ubuntu Mono', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
   background: linear-gradient(to bottom, rgba(0, 150, 136, 0.4), rgba(94, 134, 94, 0.4));
   background: rgba(0, 150, 136, 0.1);
   height: 100%;

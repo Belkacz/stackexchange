@@ -7,6 +7,7 @@ import { TagsStateType } from './services/enums';
 import { ControlPanelComponent } from './Contol-Panel';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { teal, lime } from '@mui/material/colors';
+import CssBaseline from '@mui/material/CssBaseline';
 
 function App() {
   const [data, setTags] = useRecoilState<TagsStateType>(tagsState);
@@ -17,6 +18,14 @@ function App() {
       primary: teal,
       secondary: lime,
     },
+    typography: {
+      fontFamily: [
+        'Ubuntu Mono',
+        'Roboto',
+        '-apple-system',
+        'sans-serif',
+      ].join(','),
+    },
   });
 
 
@@ -26,9 +35,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <div className="App">
         <div className='Main-container'>
-
-            <ControlPanelComponent />
-
+          <ControlPanelComponent />
           <div>
             <TagsComponent />
           </div>
