@@ -59,7 +59,8 @@ BaseInteractive.argTypes = {
 export const Base: Story = {
 
 }
-
+// przy Loading i Error na początku załadują się dane z fetch, nie tworzyłem dedykwoanego mechanizmu blokowania featch z uwagi na storyBook
+// jest to wrapowane przez setTiemout który nadpisuje dane naszymi stałymi przy kolejnym lfieCycle
 export const Loading: Story = {
     render: () => {
         const [tagsData, setTags] = useRecoilState<TagsStateType>(tagsState);

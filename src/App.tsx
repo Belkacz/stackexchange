@@ -25,11 +25,13 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <div className='Top-container'>
-          <ControlPanelComponent />
-        </div>
-        <div>
-          <TagsComponent />
+        <div className='Main-container'>
+
+            <ControlPanelComponent />
+
+          <div>
+            <TagsComponent />
+          </div>
         </div>
       </div>
     </ThemeProvider>

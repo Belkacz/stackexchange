@@ -45,67 +45,69 @@ export function ControlPanelComponent() {
     }
 
     return (
-        <div className='control-panel box-shadow'>
-            <Box sx={{ padding: '20px' }}>
-                <h3 className='text-shadow'>Panel Kontrolny</h3>
-                <div className='control-panel-buttons'>
-                    <FormControl variant="standard" MuiFormControl-root>
-                        <div className='control-panel-buttons'>
-                            <label className="control-label text-shadow ">Kolejność:</label>
-                            <Button variant="contained"
-                                sx={boxShadowStyle}
-                                disabled={errorOrLoading}
-                                onClick={toggleSortOrder}>
-                                {endpoint.order === sortOrderEnum.desc ? "Malejąca" : "Rosnąca"}
-                                {endpoint.order === sortOrderEnum.desc ?
-                                    <ArrowDownward sx={{ fontSize: 15, padding: '0px 0px 3px 0px', }} /> :
-                                    <ArrowUpward sx={{ fontSize: 15, padding: '0px 0px 3px 0px' }} />}
-                            </Button>
-                        </div>
-                        <div>
-                            <label className="control-label text-shadow ">Sortowanie:</label>
-                            <Button variant="contained"
-                                sx={boxShadowStyle}
-                                disabled={errorOrLoading}
-                                onClick={toggleSortBy}>
-                                {endpoint.sortBy === sortByEnum.name ? "Nazwą" : "Popularnością"}</Button>
-                        </div>
-                    </FormControl>
-                </div>
-            </Box>
-            <Box>
-                <div className='control-panel-buttons'>
-                    <FormControl sx={{ display: "flex", alignItems: "center", flexDirection: "row", justifyContent: "space-evenly" }}>
-                        <div className='control-panel-buttons'>
-                            <label className="control-label text-shadow ">Wielkość strony:</label>
-                            <TextField
-                                sx={{ maxWidth: '5rem' }}
-                                size="small"
-                                disabled={errorOrLoading}
-                                type="number"
-                                variant="outlined"
-                                defaultValue={endpoint.pagesize.toString()}
-                                onChange={handlePageSizeChange}
-                            />
-                        </div>
-                        <div className='base-container'>
-                            <label className="control-label">Strona:</label>
-                            <Button sx={buttonRoundedStyle}
-                                disabled={endpoint.page === 1 || errorOrLoading}
-                                onClick={() => goToPage(endpoint.page - 1)}>
-                                <ArrowBackIosNewIcon></ArrowBackIosNewIcon>
-                            </Button>
+        <div className='Top-container'>
+            <div className='control-panel box-shadow'>
+                <Box sx={{ padding: '20px' }}>
+                    <h3 className='text-shadow'>Panel Kontrolny</h3>
+                    <div className='control-panel-buttons'>
+                        <FormControl variant="standard" MuiFormControl-root>
+                            <div className='control-panel-buttons'>
+                                <label className="control-label text-shadow ">Kolejność:</label>
+                                <Button variant="contained"
+                                    sx={boxShadowStyle}
+                                    disabled={errorOrLoading}
+                                    onClick={toggleSortOrder}>
+                                    {endpoint.order === sortOrderEnum.desc ? "Malejąca" : "Rosnąca"}
+                                    {endpoint.order === sortOrderEnum.desc ?
+                                        <ArrowDownward sx={{ fontSize: 15, padding: '0px 0px 3px 0px', }} /> :
+                                        <ArrowUpward sx={{ fontSize: 15, padding: '0px 0px 3px 0px' }} />}
+                                </Button>
+                            </div>
+                            <div>
+                                <label className="control-label text-shadow ">Sortowanie:</label>
+                                <Button variant="contained"
+                                    sx={boxShadowStyle}
+                                    disabled={errorOrLoading}
+                                    onClick={toggleSortBy}>
+                                    {endpoint.sortBy === sortByEnum.name ? "Nazwą" : "Popularnością"}</Button>
+                            </div>
+                        </FormControl>
+                    </div>
+                </Box>
+                <Box>
+                    <div className='control-panel-buttons'>
+                        <FormControl sx={{ display: "flex", alignItems: "center", flexDirection: "row", justifyContent: "space-evenly" }}>
+                            <div className='control-panel-buttons'>
+                                <label className="control-label text-shadow ">Wielkość strony:</label>
+                                <TextField
+                                    sx={{ maxWidth: '5rem' }}
+                                    size="small"
+                                    disabled={errorOrLoading}
+                                    type="number"
+                                    variant="outlined"
+                                    defaultValue={endpoint.pagesize.toString()}
+                                    onChange={handlePageSizeChange}
+                                />
+                            </div>
+                            <div className='base-container'>
+                                <label className="control-label">Strona:</label>
+                                <Button sx={buttonRoundedStyle}
+                                    disabled={endpoint.page === 1 || errorOrLoading}
+                                    onClick={() => goToPage(endpoint.page - 1)}>
+                                    <ArrowBackIosNewIcon></ArrowBackIosNewIcon>
+                                </Button>
 
-                            {endpoint.page}
-                            <Button sx={buttonRoundedStyle}
-                                disabled={endpoint.page === 25 || errorOrLoading}
-                                onClick={() => goToPage(endpoint.page + 1)}>
-                                <ArrowForwardIosIcon></ArrowForwardIosIcon>
-                            </Button>
-                        </div>
-                    </FormControl>
-                </div>
-            </Box>
+                                {endpoint.page}
+                                <Button sx={buttonRoundedStyle}
+                                    disabled={endpoint.page === 25 || errorOrLoading}
+                                    onClick={() => goToPage(endpoint.page + 1)}>
+                                    <ArrowForwardIosIcon></ArrowForwardIosIcon>
+                                </Button>
+                            </div>
+                        </FormControl>
+                    </div>
+                </Box>
+            </div>
         </div>
     )
 }

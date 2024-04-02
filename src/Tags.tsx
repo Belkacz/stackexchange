@@ -9,7 +9,7 @@ export function TagsComponent() {
   const [endpoint] = useRecoilState<EndpointDataType>(endpointData);
 
   return (
-    <div className="Main-container">
+    <div className="Tags-container">
       {data.loading ? (
         <CircularProgress />
       ) : data.error ? (
@@ -19,7 +19,7 @@ export function TagsComponent() {
           </Alert>
         </div>
       ) : (
-        <div className='table-container box-shadow'  >
+        <div className='table-container'>
           <TableContainer component={Paper}>
             <Table aria-label="simple table">
               <TableHead>
