@@ -11,17 +11,17 @@ export function TagsComponent() {
   return (
     <div className="Tags-container">
       {data.loading ? (
-        <CircularProgress />
+        <CircularProgress sx={{padding: '20px'}}/>
       ) : data.error ? (
         <div className='control-label'>
-          <Alert variant="filled" severity="error" >
+          <Alert variant="filled" severity="error" sx={{padding: '20px'}}>
             Trafiliśmy na błąd: {data.error?.status} {data.error?.message}
           </Alert>
         </div>
       ) : (
         <div className='table-container'>
-          <TableContainer component={Paper}>
-            <Table aria-label="simple table">
+          <TableContainer component={Paper} sx={{borderRadius: '10px'}}>
+            <Table aria-label="simple table" >
               <TableHead>
                 <TableRow>
                   <TableCell ># </TableCell>

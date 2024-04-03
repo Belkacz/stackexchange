@@ -3,6 +3,7 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Ubuntu Mono', 'Roboto', 'Oxygen',
   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   height: 100%;
+  box-shadow: inset 0px 0px 24px 0px rgba(66, 68, 90, 1);
 }
 
 .gradient-background {
@@ -23,11 +24,11 @@
 }
 
 .box-shadow {
-  box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.4);
 }
 
 .text-shadow {
-  text-shadow: 4px 4px 6px rgba(66, 68, 90, 0.2);
+  text-shadow: 2px 2px 6px rgba(66, 68, 90, 0.4);
 }
 
 .base-container {
@@ -45,7 +46,8 @@
   padding: 0px 0px 0px 0px;
   margin-bottom: 20px;
   min-width: 650px;
-  box-shadow: 0px 10px 10px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 10px 10px 5px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
 }
 
 .control-panel {
@@ -57,7 +59,8 @@
   border-collapse: collapse;
   border-width: 0.1px;
   min-width: 610px;
-  box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;  
 }
 
 .control-panel-buttons {
@@ -68,6 +71,7 @@
 
 .control-label {
   padding: 10px;
+  text-shadow: 2px 2px 6px rgba(66, 68, 90, 0.4);
 }
 
 .arrow-inside-btn {

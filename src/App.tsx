@@ -27,7 +27,6 @@ function App() {
     },
   });
 
-
   useFetchTagsData(data, setTags);
 
   return (

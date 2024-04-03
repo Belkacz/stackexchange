@@ -41,7 +41,8 @@ export function ControlPanelComponent() {
     };
 
     const boxShadowStyle = {
-        boxShadow: '2px 2px 6px 0px rgba(0, 0, 0, 0.3 )'
+        boxShadow: '2px 2px 6px 0px rgba(0, 0, 0, 0.4)',
+        textShadow: '2px 2px 6px rgba(66, 68, 90, 0.4)'
     }
 
     return (
@@ -97,7 +98,7 @@ export function ControlPanelComponent() {
                                     <ArrowBackIosNewIcon></ArrowBackIosNewIcon>
                                 </Button>
 
-                                {endpoint.page}
+                                <p className='text-shadow'>{endpoint.page}</p>
                                 <Button sx={buttonRoundedStyle}
                                     disabled={endpoint.page === 25 || errorOrLoading}
                                     onClick={() => goToPage(endpoint.page + 1)}>
