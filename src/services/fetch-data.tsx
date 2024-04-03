@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { UrlBuild } from './interfaces'
 
-function buildURL({ protocol, siteName: siteName, version, endpoint }: UrlBuild): string {
+function buildURL({ protocol, siteName, version, endpoint }: UrlBuild): string {
     return protocol + '://' + siteName + '/' + version + '/' + endpoint;
 }
 

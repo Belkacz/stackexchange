@@ -1,5 +1,5 @@
 import { SetStateAction, useEffect } from 'react';
-import { fetchData } from './featch-data';
+import { fetchData } from './fetch-data';
 import { TagsStateType, baseUrls, protocols, serviceVersion, EndpointDataTyp } from './enums';
 import { useRecoilState } from 'recoil';
 import { endpointData } from './atoms';

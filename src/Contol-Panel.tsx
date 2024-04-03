@@ -50,7 +50,7 @@ export function ControlPanelComponent() {
                 <Box sx={{ padding: '20px' }}>
                     <h3 className='text-shadow'>Panel Kontrolny</h3>
                     <div className='control-panel-buttons'>
-                        <FormControl variant="standard" MuiFormControl-root>
+                        <FormControl variant="standard">
                             <div className='control-panel-buttons'>
                                 <label className="control-label text-shadow ">Kolejność:</label>
                                 <Button variant="contained"
