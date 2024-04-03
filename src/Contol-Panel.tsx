@@ -5,7 +5,6 @@ import { EndpointDataTyp, TagsStateType, sortByEnum, sortOrderEnum } from './ser
 import { ArrowDownward, ArrowUpward, FirstPage, LastPage } from '@mui/icons-material'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import LastPageIcon from '@mui/icons-material/LastPage';
 import { useState } from 'react';
 
 
@@ -70,6 +69,8 @@ export function ControlPanelComponent() {
         } 
         if (page === 25) {
             setPageNumberError("25 to ostatnia strona")
+        } else {
+            setPageNumberError(null)
         }
     };
 
