@@ -22,40 +22,6 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-type Args = {
-    tags: SingleTag[];
-    loading: boolean;
-    error: AxiosError | customError | null
-};
-
-export const BaseInteractive: StoryObj<Args> = (args: Args) => {
-    const [tagsData, setTags] = useRecoilState<TagsStateType>(tagsState);
-
-    useEffect(() => {
-            setTags({
-                tags: args.tags,
-                loading: args.loading,
-                error: args.error
-            });
-    }, [args.loading, args.error]);
-
-    return <App />;
-};
-
-BaseInteractive.args = {
-    tags: [
-        { name: 'pierwszy', count: 444, has_synonyms: true, is_moderator_only: true, is_required: true },
-        { name: 'drugi', count: 555, has_synonyms: true, is_moderator_only: true, is_required: true }
-    ],
-    loading: false,
-    error: null // { status: 418, message: "I'm a teapot: The server refuses the attempt to brew coffee with a teapot." }
-};
-
-BaseInteractive.argTypes = {
-    tags: { control: 'object' },
-    loading: { control: 'boolean' },
-    error: { control: 'object' }
-};
 export const Base: Story = {
 
 }
@@ -79,6 +45,41 @@ export const Error: Story = {
         })
         return <App />;
     },
+};
+
+type Args = {
+    tags: SingleTag[];
+    loading: boolean;
+    error: AxiosError | customError | null
+};
+
+export const BaseInteractive: StoryObj<Args> = (args: Args) => {
+    const [tagsData, setTags] = useRecoilState<TagsStateType>(tagsState);
+
+    setTimeout(() => {
+        setTags({
+            tags: args.tags,
+            loading: args.loading,
+            error: args.error
+        });
+    });
+
+    return <App />;
+};
+
+BaseInteractive.args = {
+    tags: [
+        { name: 'pierwszy', count: 444, has_synonyms: true, is_moderator_only: true, is_required: true },
+        { name: 'drugi', count: 555, has_synonyms: true, is_moderator_only: true, is_required: true }
+    ],
+    loading: false,
+    error: null // { status: 418, message: "I'm a teapot: The server refuses the attempt to brew coffee with a teapot." }
+};
+
+BaseInteractive.argTypes = {
+    tags: { control: 'object' },
+    loading: { control: 'boolean' },
+    error: { control: 'object' }
 };
 
 
