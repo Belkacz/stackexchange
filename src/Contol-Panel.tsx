@@ -57,10 +57,10 @@ export function ControlPanelComponent() {
                                     sx={boxShadowStyle}
                                     disabled={errorOrLoading}
                                     onClick={toggleSortOrder}>
-                                    {endpoint.order === sortOrderEnum.desc ? "Malejąca" : "Rosnąca"}
+                                    {endpoint.order === sortOrderEnum.desc ? "Malejąca " : "Rosnąca "}
                                     {endpoint.order === sortOrderEnum.desc ?
-                                        <ArrowDownward sx={{ fontSize: 15, padding: '0px 0px 3px 0px', }} /> :
-                                        <ArrowUpward sx={{ fontSize: 15, padding: '0px 0px 3px 0px' }} />}
+                                        <ArrowDownward sx={{ fontSize: 15 }} /> :
+                                        <ArrowUpward sx={{ fontSize: 15 }} />}
                                 </Button>
                             </div>
                             <div>

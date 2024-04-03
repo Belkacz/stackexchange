@@ -1,9 +1,7 @@
 .App {
   text-align: center;
-  box-shadow: inset rgba(0, 150, 136, 1);
   font-family: -apple-system, BlinkMacSystemFont, 'Ubuntu Mono', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  sans-serif;
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   height: 100%;
 }
 
@@ -30,10 +28,6 @@
 
 .text-shadow {
   text-shadow: 4px 4px 6px rgba(66, 68, 90, 0.2);
-}
-
-.border-radius {
-  border-radius: '30px'
 }
 
 .base-container {
@@ -78,32 +72,24 @@
 
 .arrow-inside-btn {
   font-size: 15px;
-  padding: 0px 0px 2px 0px;
+  padding: 0;
 }
 
 .MuiFormControl-root.css-1nrlq1o-MuiFormControl-root {
   flex-direction: row;
   -webkit-flex-direction: row;
-  align-items: center;
-}
-
-.MuiFormControl-root{
-  flex-direction: row;
-  -webkit-flex-direction: row;
 }
 
 @media (max-width: 610px) {
-  .control-panel {
-    min-width: 0;
-    max-width: 13.3rem;
-  }
-  .Main-container {
-    min-width: 0;
-    width: auto;
-  }
+  .control-panel,
+  .Main-container,
   .table-container {
     min-width: 0;
     width: auto;
+  }
+
+  .control-panel {
+    max-width: 13.3rem;
   }
 
   .control-panel-buttons {
@@ -113,7 +99,8 @@
     justify-content: center;
   }
 
-  .MuiFormControl-root.css-1nrlq1o-MuiFormControl-root {
+  .MuiFormControl-root.css-1nrlq1o-MuiFormControl-root,
+  .MuiFormControl-root {
     flex-direction: column;
     -webkit-flex-direction: column;
   }
@@ -123,16 +110,17 @@
     -webkit-flex-direction: column !important;
   }
 
-  .control-label{
+
+  .control-label {
     padding: 0px;
   }
 
-  .MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary{
+  .MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary {
     max-width: 130px;
     font-size: 12px;
   }
 
-  .Tags-container{
+  .Tags-container {
     padding: 0px;
   }
 
@@ -140,6 +128,6 @@
     .base-container {
       flex-direction: column;
       justify-content: center;
-    } 
+    }
   }
 }
