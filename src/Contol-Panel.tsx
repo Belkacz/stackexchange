@@ -1,17 +1,39 @@
-import { Box, Button, FormControl, TextField } from '@mui/material';
+import { Box, Button, FormControl, TextField, Typography } from '@mui/material';
 import { useRecoilState } from 'recoil';
 import { tagsState, endpointData } from './services/atoms'
 import { EndpointDataTyp, TagsStateType, sortByEnum, sortOrderEnum } from './services/enums';
-import { ArrowDownward, ArrowUpward } from '@mui/icons-material'
+import { ArrowDownward, ArrowUpward, FirstPage, LastPage } from '@mui/icons-material'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import { useState } from 'react';
 
 
 export function ControlPanelComponent() {
     const [tagsData] = useRecoilState<TagsStateType>(tagsState);
     const [endpoint, setEndpoint] = useRecoilState<EndpointDataTyp>(endpointData);
+    const [pageSizeError, setPageSizeError] = useState<string | null>(null);
+    const [pageNumberError, setPageNumberError] = useState<string | null>(null);
 
     const errorOrLoading = tagsData.loading || tagsData.error != null;
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    const buttonRoundedStyle = {
+        borderRadius: '30px',
+        flex: 'inline-flex',
+        padding: '5',
+        minWidth: '30px'
+    };
+
+    const smallButton = {
+        height: '20px',
+        minWidth: '20px'
+    };
+
+    const boxShadowStyle = {
+        boxShadow: '2px 2px 6px 0px rgba(0, 0, 0, 0.4)',
+        textShadow: '2px 2px 6px rgba(66, 68, 90, 0.4)'
+    }
 
     const toggleSortOrder = () => {
         const newOrder = endpoint.order === sortOrderEnum.desc ? sortOrderEnum.asc : sortOrderEnum.desc;
@@ -24,36 +46,42 @@ export function ControlPanelComponent() {
     };
 
     const handlePageSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setTimeout(() => {
-            const pageSize = parseInt(event.target.value);
-            setEndpoint({ ...endpoint, pagesize: pageSize });
-        }, 1000)
+        clearTimeout(timeoutId);
+        let value = parseInt(event.target.value);
+        if (value < 1) {
+            value = 1;
+            event.target.value = value.toString();
+        } else if (value > 100) {
+            value = 100;
+            setPageSizeError("Maksymalna wielkość strony to 100");
+            event.target.value = value.toString();
+        } else {
+            setPageSizeError(null);
+            event.target.value = value.toString();
+            timeoutId = setTimeout(() => {
+                setEndpoint({ ...endpoint, pagesize: value });
+            }, 1000);
+        }
     };
 
     const goToPage = (page: number) => {
-        setEndpoint({ ...endpoint, page: page });
+        if (page - 1 > 0 || page + 1 < 25) {
+            setEndpoint({ ...endpoint, page: page });
+        } 
+        if (page === 25) {
+            setPageNumberError("25 to ostatnia strona")
+        }
     };
-
-
-    const buttonRoundedStyle = {
-        borderRadius: '30px',
-        flex: 'inline-flex'
-    };
-
-    const boxShadowStyle = {
-        boxShadow: '2px 2px 6px 0px rgba(0, 0, 0, 0.4)',
-        textShadow: '2px 2px 6px rgba(66, 68, 90, 0.4)'
-    }
 
     return (
         <div className='Top-container'>
             <div className='control-panel box-shadow'>
                 <Box sx={{ padding: '20px' }}>
-                    <h3 className='text-shadow'>Panel Kontrolny</h3>
+                    <h3 className='text-style'>Panel Kontrolny</h3>
                     <div className='control-panel-buttons'>
                         <FormControl variant="standard">
                             <div className='control-panel-buttons'>
-                                <label className="control-label text-shadow ">Kolejność:</label>
+                                <label className="control-label text-style ">Kolejność:</label>
                                 <Button variant="contained"
                                     sx={boxShadowStyle}
                                     disabled={errorOrLoading}
@@ -65,7 +93,7 @@ export function ControlPanelComponent() {
                                 </Button>
                             </div>
                             <div>
-                                <label className="control-label text-shadow ">Sortowanie:</label>
+                                <label className="control-label text-style ">Sortowanie:</label>
                                 <Button variant="contained"
                                     sx={boxShadowStyle}
                                     disabled={errorOrLoading}
@@ -79,7 +107,7 @@ export function ControlPanelComponent() {
                     <div className='control-panel-buttons'>
                         <FormControl sx={{ display: "flex", alignItems: "center", flexDirection: "row", justifyContent: "space-evenly" }}>
                             <div className='control-panel-buttons'>
-                                <label className="control-label text-shadow ">Wielkość strony:</label>
+                                <label className="control-label text-style ">Wielkość strony:</label>
                                 <TextField
                                     sx={{ maxWidth: '5rem' }}
                                     size="small"
@@ -90,24 +118,83 @@ export function ControlPanelComponent() {
                                     onChange={handlePageSizeChange}
                                 />
                             </div>
+                        </FormControl>
+                    </div>
+                </Box>
+                <Box>
+                    <div className='control-panel-buttons'>
+                        <FormControl sx={{ display: "flex", alignItems: "center", flexDirection: "row", justifyContent: "space-evenly" }}>
                             <div className='base-container'>
-                                <label className="control-label">Strona:</label>
-                                <Button sx={buttonRoundedStyle}
+                                <label className="control-label" style={{ paddingRight: '0px' }}>Strona:</label>
+                                <Button
+                                    sx={buttonRoundedStyle}
+                                    disabled={endpoint.page === 1 || errorOrLoading}
+                                    onClick={() => goToPage(1)}>
+                                    <FirstPage />
+                                </Button>
+                                <Button
+                                    sx={buttonRoundedStyle}
                                     disabled={endpoint.page === 1 || errorOrLoading}
                                     onClick={() => goToPage(endpoint.page - 1)}>
-                                    <ArrowBackIosNewIcon></ArrowBackIosNewIcon>
+                                    <ArrowBackIosNewIcon />
                                 </Button>
-
-                                <p className='text-shadow'>{endpoint.page}</p>
-                                <Button sx={buttonRoundedStyle}
-                                    disabled={endpoint.page === 25 || errorOrLoading}
+                                {endpoint.page - 2 > 0 && (<Button
+                                    sx={{ ...buttonRoundedStyle, ...smallButton }}
+                                    disabled={endpoint.pagesize < 1 || endpoint.pagesize > 100 || errorOrLoading}
+                                    onClick={() => goToPage(endpoint.page - 2)}>
+                                    <p className='text-style'>{endpoint.page - 2}</p>
+                                </Button>
+                                )}
+                                {endpoint.page - 1 > 0 && (<Button
+                                    sx={{ ...buttonRoundedStyle, ...smallButton }}
+                                    disabled={endpoint.pagesize < 1 || endpoint.pagesize > 100 || errorOrLoading}
+                                    onClick={() => goToPage(endpoint.page - 1)}>
+                                    <p className='text-style'>{endpoint.page - 1}</p>
+                                </Button>
+                                )}
+                                <p className='text-style'>{endpoint.page}</p>
+                                {endpoint.page + 1 <= 25 && (<Button
+                                    sx={{ ...buttonRoundedStyle, ...smallButton }}
+                                    disabled={endpoint.page === 25 || endpoint.pagesize < 1 || endpoint.pagesize > 100 || errorOrLoading}
                                     onClick={() => goToPage(endpoint.page + 1)}>
-                                    <ArrowForwardIosIcon></ArrowForwardIosIcon>
+                                    <p className='text-style'>{endpoint.page + 1}</p>
+                                </Button>
+                                )}
+                                {endpoint.page + 2 <= 25 && (<Button
+                                    sx={{ ...buttonRoundedStyle, ...smallButton }}
+                                    disabled={endpoint.page === 25 || endpoint.pagesize < 1 || endpoint.pagesize > 100 || errorOrLoading}
+                                    onClick={() => goToPage(endpoint.page + 2)}>
+                                    <p className='text-style'>{endpoint.page + 2}</p>
+                                </Button>
+                                )}
+                                <Button
+                                    sx={buttonRoundedStyle}
+                                    disabled={endpoint.page === 25 || endpoint.pagesize < 1 || endpoint.pagesize > 100 || errorOrLoading}
+                                    onClick={() => goToPage(endpoint.page + 1)}>
+                                    <ArrowForwardIosIcon />
+                                </Button>
+                                <Button
+                                    sx={buttonRoundedStyle}
+                                    disabled={endpoint.page === 25 || endpoint.pagesize < 1 || endpoint.pagesize > 100 || errorOrLoading}
+                                    onClick={() => goToPage(25)}>
+                                    <LastPage />
                                 </Button>
                             </div>
                         </FormControl>
                     </div>
                 </Box>
+                <div className='control-errors'>
+                    {pageSizeError && (
+                        <Typography variant="caption" color="error">
+                            {pageSizeError}
+                        </Typography>
+                    )}
+                    {pageNumberError && (
+                        <Typography variant="caption" color="warning.main">
+                            {pageNumberError}
+                        </Typography>
+                    )}
+                </div>
             </div>
         </div>
     )

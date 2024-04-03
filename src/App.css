@@ -3,7 +3,6 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Ubuntu Mono', 'Roboto', 'Oxygen',
   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   height: 100%;
-  box-shadow: inset 0px 0px 24px 0px rgba(66, 68, 90, 1);
 }
 
 .gradient-background {
@@ -11,6 +10,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   min-height: 720px;
+  box-shadow: inset 0px 0px 24px 0px rgba(66, 68, 90, 1);
 }
 
 .Main-container {
@@ -27,8 +27,9 @@
   box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.4);
 }
 
-.text-shadow {
+.text-style {
   text-shadow: 2px 2px 6px rgba(66, 68, 90, 0.4);
+  padding: 5px;
 }
 
 .base-container {
