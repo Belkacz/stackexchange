@@ -136,10 +136,10 @@ export function ControlPanelComponent() {
 
     const changeSinglePage = (sign: plusOrMinusSigns) => {
         if(sign === plusOrMinusSigns.plus) {
-            setLocalPageSize((prev) => prev +1);
+            setLocalPageSize((prev) => prev + 1);
         }
         if(sign === plusOrMinusSigns.minus) {
-            setLocalPageSize((prev) => prev +1);
+            setLocalPageSize((prev) => prev - 1);
         }
     }
 
@@ -180,7 +180,7 @@ export function ControlPanelComponent() {
                                 <label className="control-label text-style ">Wielkość strony:</label>
                                 <Button
                                     sx={buttonRoundedStyle}
-                                    disabled={localPageSize <= 1}
+                                    disabled={localPageSize <= 1 || tagsData.error != null}
                                     onClick={() => changeSinglePage(plusOrMinusSigns.minus)}
                                     onMouseDown={() => startPress(750, plusOrMinusSigns.minus, localPageSize )}
                                     onMouseUp={endPress}>
@@ -198,7 +198,7 @@ export function ControlPanelComponent() {
                                 />
                                 <Button
                                     sx={buttonRoundedStyle}
-                                    disabled={localPageSize >= 100}
+                                    disabled={localPageSize >= 100 || tagsData.error != null}
                                     onClick={() => changeSinglePage(plusOrMinusSigns.plus)}
                                     onMouseDown={() => startPress(750, plusOrMinusSigns.plus, localPageSize )}
                                     onMouseUp={endPress}
