@@ -8,13 +8,11 @@ import { AxiosError } from 'axios';
 export function useFetchData(atom: TagsStateType, setData: React.Dispatch<SetStateAction<TagsStateType>>) {
     const [endpoint] = useRecoilState<EndpointDataTyp>(endpointData);
     const newEndpoint = 'tags?page=' + endpoint.page + '&pagesize=' + endpoint.pagesize + '&order=' + endpoint.order + '&sort=' + endpoint.sortBy + '&site=stackoverflow';
-    const [canFetch, setCanFetch] = useState(true);
-
     useEffect(() => {
         if (!atom.loading) {
             setData({ ...atom, loading: true, error: null });
         }
-
+        console.log(endpoint.pagesize)
         const fetchDataAsync = async () => {
             try {
                 const result = await fetchData({
@@ -34,13 +32,6 @@ export function useFetchData(atom: TagsStateType, setData: React.Dispatch<SetSta
             }
         };
 
-        if(canFetch) {
-            fetchDataAsync();
-            setCanFetch(false);
-            setTimeout(()=>{
-                setCanFetch(true);
-                fetchDataAsync();
-            }, 2000)
-        } 
+        fetchDataAsync();
     }, [endpoint]);
 }

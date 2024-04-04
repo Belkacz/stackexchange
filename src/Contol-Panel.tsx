@@ -15,6 +15,8 @@ export function ControlPanelComponent() {
     const [pageSizeError, setPageSizeError] = useState<string | null>(null);
     const [pageNumberError, setPageNumberError] = useState<string | null>(null);
     const [notANumberError, setNotANumber] = useState<string | null>(null);
+    const [localPageSize, setLocalPageSize] = useState(endpoint.pagesize);
+    const [pressIntervalId, setPressIntervalId] = useState<NodeJS.Timeout | null>(null);
 
     const errorOrLoading = tagsData.loading || tagsData.error != null;
     let inputTimeoutId: ReturnType<typeof setTimeout>;
@@ -46,17 +48,18 @@ export function ControlPanelComponent() {
         setEndpoint({ ...endpoint, sortBy: newSortBy });
     };
 
-    const handlePageSizeChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        clearTimeout(inputTimeoutId);
-        let value = parseInt(event.target.value);
-        if(value === localPageSize) {
-            return;
+    const handlePageSizeChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, manualInput = false) => {
+        if(inputTimeoutId != null){
+            clearTimeout(inputTimeoutId);
         }
+
+        let value = parseInt(event.target.value);
+
         if (isNaN(value)) {
-            setNotANumber("Numer strony musi być liczbą")
+            setNotANumber("Numer strony musi być liczbą");
             return;
         } else {
-            setNotANumber(null)
+            setNotANumber(null);
         }
 
         if (value < 1) {
@@ -67,10 +70,13 @@ export function ControlPanelComponent() {
         } else {
             setPageSizeError(null);
         }
-        setLocalPageSize(value)
+
+        if (manualInput) {
+            setLocalPageSize(value);
+        }
         inputTimeoutId = setTimeout(() => {
-            setEndpoint({ ...endpoint, pagesize: value });
-        }, 1000);
+            setEndpoint(prevState => ({ ...prevState, pagesize: value }));
+        }, 500);
     };
 
     const goToPage = (page: number) => {
@@ -84,11 +90,7 @@ export function ControlPanelComponent() {
         }
     };
 
-
-    const [localPageSize, setLocalPageSize] = useState(endpoint.pagesize);
-    const [pressIntervalId, setPressIntervalId] = useState<NodeJS.Timeout | null>(null);
-
-    const startPress = (speed = 750, sign: plusOrMinusSigns, pageSizeValue: number ) => {
+    const startPress = (speed = 750, sign: plusOrMinusSigns, pageSizeValue: number) => {
         let intervalCount = 0;
 
         let intervalId = setInterval(() => {
@@ -99,7 +101,7 @@ export function ControlPanelComponent() {
                 pageSizeValue--;
                 setLocalPageSize(prev => prev - 1);
             }
-    
+
             if (pageSizeValue >= 100 || pageSizeValue <= 1) {
                 clearInterval(intervalId);
                 endPress();
@@ -117,7 +119,6 @@ export function ControlPanelComponent() {
                 startPress(speed - 100, sign, pageSizeValue);
             }
         }, speed);
-    
         setPressIntervalId(intervalId);
     };
 
@@ -127,19 +128,19 @@ export function ControlPanelComponent() {
             setPressIntervalId(null);
         }
         setPressIntervalId(null);
-        if (endpoint.pagesize + localPageSize !> 100) {
-            setEndpoint(prevEndpoint => ({ ...prevEndpoint, pagesize: localPageSize }))
-        } else {
-            setEndpoint(prevEndpoint => ({ ...prevEndpoint, pagesize: 100 }))
-        }
+
+        setEndpoint(prevEndpoint => ({ ...prevEndpoint, pagesize: localPageSize }))
+
     };
 
     const changeSinglePage = (sign: plusOrMinusSigns) => {
-        if(sign === plusOrMinusSigns.plus) {
+        if (sign === plusOrMinusSigns.plus) {
             setLocalPageSize((prev) => prev + 1);
+            setEndpoint((prevEndpoint) => ({ ...prevEndpoint, pagesize: prevEndpoint.pagesize + 1 }));
         }
-        if(sign === plusOrMinusSigns.minus) {
+        if (sign === plusOrMinusSigns.minus) {
             setLocalPageSize((prev) => prev - 1);
+            setEndpoint((prevEndpoint) => ({ ...prevEndpoint, pagesize: prevEndpoint.pagesize - 1 }));
         }
     }
 
@@ -182,7 +183,7 @@ export function ControlPanelComponent() {
                                     sx={buttonRoundedStyle}
                                     disabled={localPageSize <= 1 || tagsData.error != null}
                                     onClick={() => changeSinglePage(plusOrMinusSigns.minus)}
-                                    onMouseDown={() => startPress(750, plusOrMinusSigns.minus, localPageSize )}
+                                    onMouseDown={() => startPress(750, plusOrMinusSigns.minus, localPageSize)}
                                     onMouseUp={endPress}>
                                     <RemoveCircleOutline />
                                 </Button>
@@ -193,16 +194,16 @@ export function ControlPanelComponent() {
                                     variant="outlined"
                                     value={localPageSize.toString()}
                                     onChange={(event) => {
-                                        handlePageSizeChange(event);
+                                        handlePageSizeChange(event, true);
                                     }}
                                 />
                                 <Button
                                     sx={buttonRoundedStyle}
                                     disabled={localPageSize >= 100 || tagsData.error != null}
                                     onClick={() => changeSinglePage(plusOrMinusSigns.plus)}
-                                    onMouseDown={() => startPress(750, plusOrMinusSigns.plus, localPageSize )}
+                                    onMouseDown={() => startPress(750, plusOrMinusSigns.plus, localPageSize)}
                                     onMouseUp={endPress}
-                                    >
+                                >
                                     <AddCircleOutlineIcon />
                                 </Button>
                             </div>
