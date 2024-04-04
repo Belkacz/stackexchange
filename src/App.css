@@ -23,6 +23,11 @@
   padding: 5px 20px 20px 20px;
 }
 
+.control-errors {
+  display: flex;
+  flex-direction: column;
+}
+
 .box-shadow {
   box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.4);
 }
@@ -94,7 +99,7 @@
   }
 
   .control-panel {
-    max-width: 13.3rem;
+    max-width: 18rem;
   }
 
   .control-panel-buttons {

@@ -1,10 +1,11 @@
 import { Box, Button, FormControl, TextField, Typography } from '@mui/material';
 import { useRecoilState } from 'recoil';
 import { tagsState, endpointData } from './services/atoms'
-import { EndpointDataTyp, TagsStateType, sortByEnum, sortOrderEnum } from './services/enums';
-import { ArrowDownward, ArrowUpward, FirstPage, LastPage } from '@mui/icons-material'
+import { EndpointDataTyp, TagsStateType, plusOrMinusSigns, sortByEnum, sortOrderEnum } from './services/enums';
+import { ArrowDownward, ArrowUpward, FirstPage, LastPage, RemoveCircleOutline } from '@mui/icons-material'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useState } from 'react';
 
 
@@ -13,9 +14,10 @@ export function ControlPanelComponent() {
     const [endpoint, setEndpoint] = useRecoilState<EndpointDataTyp>(endpointData);
     const [pageSizeError, setPageSizeError] = useState<string | null>(null);
     const [pageNumberError, setPageNumberError] = useState<string | null>(null);
+    const [notANumberError, setNotANumber] = useState<string | null>(null);
 
     const errorOrLoading = tagsData.loading || tagsData.error != null;
-    let timeoutId: ReturnType<typeof setTimeout>;
+    let inputTimeoutId: ReturnType<typeof setTimeout>;
 
     const buttonRoundedStyle = {
         borderRadius: '30px',
@@ -44,35 +46,102 @@ export function ControlPanelComponent() {
         setEndpoint({ ...endpoint, sortBy: newSortBy });
     };
 
-    const handlePageSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        clearTimeout(timeoutId);
+    const handlePageSizeChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        clearTimeout(inputTimeoutId);
         let value = parseInt(event.target.value);
+        if(value === localPageSize) {
+            return;
+        }
+        if (isNaN(value)) {
+            setNotANumber("Numer strony musi być liczbą")
+            return;
+        } else {
+            setNotANumber(null)
+        }
+
         if (value < 1) {
             value = 1;
-            event.target.value = value.toString();
         } else if (value > 100) {
             value = 100;
             setPageSizeError("Maksymalna wielkość strony to 100");
-            event.target.value = value.toString();
         } else {
             setPageSizeError(null);
-            event.target.value = value.toString();
-            timeoutId = setTimeout(() => {
-                setEndpoint({ ...endpoint, pagesize: value });
-            }, 1000);
         }
+        setLocalPageSize(value)
+        inputTimeoutId = setTimeout(() => {
+            setEndpoint({ ...endpoint, pagesize: value });
+        }, 1000);
     };
 
     const goToPage = (page: number) => {
         if (page - 1 > 0 || page + 1 < 25) {
             setEndpoint({ ...endpoint, page: page });
-        } 
+        }
         if (page === 25) {
-            setPageNumberError("25 to ostatnia strona")
+            setPageNumberError("25 to maksymalna obsługiwana strona")
         } else {
             setPageNumberError(null)
         }
     };
+
+
+    const [localPageSize, setLocalPageSize] = useState(endpoint.pagesize);
+    const [pressIntervalId, setPressIntervalId] = useState<NodeJS.Timeout | null>(null);
+
+    const startPress = (speed = 750, sign: plusOrMinusSigns, pageSizeValue: number ) => {
+        let intervalCount = 0;
+
+        let intervalId = setInterval(() => {
+            if (sign === plusOrMinusSigns.plus) {
+                pageSizeValue++;
+                setLocalPageSize(prev => prev + 1);
+            } else {
+                pageSizeValue--;
+                setLocalPageSize(prev => prev - 1);
+            }
+    
+            if (pageSizeValue >= 100 || pageSizeValue <= 1) {
+                clearInterval(intervalId);
+                endPress();
+                return true;
+            }
+
+            intervalCount++;
+
+            if (intervalCount === 3 && speed > 100) {
+                intervalCount = 0;
+                clearInterval(intervalId);
+                if (pressIntervalId !== null) {
+                    clearInterval(pressIntervalId);
+                }
+                startPress(speed - 100, sign, pageSizeValue);
+            }
+        }, speed);
+    
+        setPressIntervalId(intervalId);
+    };
+
+    const endPress = () => {
+        if (pressIntervalId !== null) {
+            clearInterval(pressIntervalId);
+            setPressIntervalId(null);
+        }
+        setPressIntervalId(null);
+        if (endpoint.pagesize + localPageSize !> 100) {
+            setEndpoint(prevEndpoint => ({ ...prevEndpoint, pagesize: localPageSize }))
+        } else {
+            setEndpoint(prevEndpoint => ({ ...prevEndpoint, pagesize: 100 }))
+        }
+    };
+
+    const changeSinglePage = (sign: plusOrMinusSigns) => {
+        if(sign === plusOrMinusSigns.plus) {
+            setLocalPageSize((prev) => prev +1);
+        }
+        if(sign === plusOrMinusSigns.minus) {
+            setLocalPageSize((prev) => prev +1);
+        }
+    }
 
     return (
         <div className='Top-container'>
@@ -109,15 +178,33 @@ export function ControlPanelComponent() {
                         <FormControl sx={{ display: "flex", alignItems: "center", flexDirection: "row", justifyContent: "space-evenly" }}>
                             <div className='control-panel-buttons'>
                                 <label className="control-label text-style ">Wielkość strony:</label>
+                                <Button
+                                    sx={buttonRoundedStyle}
+                                    disabled={localPageSize <= 1}
+                                    onClick={() => changeSinglePage(plusOrMinusSigns.minus)}
+                                    onMouseDown={() => startPress(750, plusOrMinusSigns.minus, localPageSize )}
+                                    onMouseUp={endPress}>
+                                    <RemoveCircleOutline />
+                                </Button>
                                 <TextField
-                                    sx={{ maxWidth: '5rem' }}
+                                    sx={{ maxWidth: '3.2rem' }}
                                     size="small"
                                     disabled={errorOrLoading}
-                                    type="number"
                                     variant="outlined"
-                                    defaultValue={endpoint.pagesize.toString()}
-                                    onChange={handlePageSizeChange}
+                                    value={localPageSize.toString()}
+                                    onChange={(event) => {
+                                        handlePageSizeChange(event);
+                                    }}
                                 />
+                                <Button
+                                    sx={buttonRoundedStyle}
+                                    disabled={localPageSize >= 100}
+                                    onClick={() => changeSinglePage(plusOrMinusSigns.plus)}
+                                    onMouseDown={() => startPress(750, plusOrMinusSigns.plus, localPageSize )}
+                                    onMouseUp={endPress}
+                                    >
+                                    <AddCircleOutlineIcon />
+                                </Button>
                             </div>
                         </FormControl>
                     </div>
@@ -193,6 +280,11 @@ export function ControlPanelComponent() {
                     {pageNumberError && (
                         <Typography variant="caption" color="warning.main">
                             {pageNumberError}
+                        </Typography>
+                    )}
+                    {notANumberError && (
+                        <Typography variant="caption" color="error">
+                            {notANumberError}
                         </Typography>
                     )}
                 </div>

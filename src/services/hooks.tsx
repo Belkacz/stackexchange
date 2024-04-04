@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect } from 'react';
+import { useState, useEffect, SetStateAction } from 'react';
 import { fetchData } from './fetch-data';
 import { TagsStateType, baseUrls, protocols, serviceVersion, EndpointDataTyp } from './enums';
 import { useRecoilState } from 'recoil';
@@ -8,10 +8,13 @@ import { AxiosError } from 'axios';
 export function useFetchData(atom: TagsStateType, setData: React.Dispatch<SetStateAction<TagsStateType>>) {
     const [endpoint] = useRecoilState<EndpointDataTyp>(endpointData);
     const newEndpoint = 'tags?page=' + endpoint.page + '&pagesize=' + endpoint.pagesize + '&order=' + endpoint.order + '&sort=' + endpoint.sortBy + '&site=stackoverflow';
+    const [canFetch, setCanFetch] = useState(true);
+
     useEffect(() => {
         if (!atom.loading) {
             setData({ ...atom, loading: true, error: null });
         }
+
         const fetchDataAsync = async () => {
             try {
                 const result = await fetchData({
@@ -30,6 +33,14 @@ export function useFetchData(atom: TagsStateType, setData: React.Dispatch<SetSta
                 console.error('Błąd pobierania:', error);
             }
         };
-        fetchDataAsync();
+
+        if(canFetch) {
+            fetchDataAsync();
+            setCanFetch(false);
+            setTimeout(()=>{
+                setCanFetch(true);
+                fetchDataAsync();
+            }, 2000)
+        } 
     }, [endpoint]);
 }

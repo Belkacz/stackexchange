@@ -13,6 +13,7 @@ export type SingleTag = {
 //     message: string;
 //   }
 
+
 export type customError = {
     status: number;
     message: string;
@@ -52,4 +53,9 @@ export enum sortOrderEnum {
 export enum sortByEnum {
     popular = 'popular',
     name ='name'
+}
+
+export enum plusOrMinusSigns {
+    minus = "MINUS",
+    plus = "PLUS"
 }

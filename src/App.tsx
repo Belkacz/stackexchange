@@ -6,7 +6,7 @@ import { useFetchData as useFetchTagsData } from './services/hooks'
 import { TagsStateType } from './services/enums';
 import { ControlPanelComponent } from './Contol-Panel';
 import { ThemeProvider, createTheme } from '@mui/material';
-import { teal, lime, yellow } from '@mui/material/colors';
+import { teal, lime } from '@mui/material/colors';
 
 function App() {
   const [data, setTags] = useRecoilState<TagsStateType>(tagsState);
