@@ -17,6 +17,7 @@ export function ControlPanelComponent() {
     const [notANumberError, setNotANumber] = useState<string | null>(null);
     const [localPageSize, setLocalPageSize] = useState(endpoint.pagesize);
     const [pressIntervalId, setPressIntervalId] = useState<NodeJS.Timeout | null>(null);
+    const [buttonPressedFlag, setButtonPressedFlag] =useState(false);
 
     const errorOrLoading = tagsData.loading || tagsData.error != null;
     let inputTimeoutId: ReturnType<typeof setTimeout>;
@@ -90,7 +91,8 @@ export function ControlPanelComponent() {
         }
     };
 
-    const startPress = (speed = 750, sign: plusOrMinusSigns, pageSizeValue: number) => {
+    const startPress = (speed = 800, sign: plusOrMinusSigns, pageSizeValue: number) => {
+        setButtonPressedFlag(true);
         let intervalCount = 0;
 
         let intervalId = setInterval(() => {
@@ -109,8 +111,7 @@ export function ControlPanelComponent() {
             }
 
             intervalCount++;
-
-            if (intervalCount === 3 && speed > 100) {
+            if (intervalCount === 1 && speed > 100) {
                 intervalCount = 0;
                 clearInterval(intervalId);
                 if (pressIntervalId !== null) {
@@ -130,8 +131,10 @@ export function ControlPanelComponent() {
         setPressIntervalId(null);
 
         setEndpoint(prevEndpoint => ({ ...prevEndpoint, pagesize: localPageSize }))
-
+        setButtonPressedFlag(false)
     };
+
+    let pageClickTiemout: ReturnType<typeof setTimeout>;
 
     const changeSinglePage = (sign: plusOrMinusSigns) => {
         if (sign === plusOrMinusSigns.plus) {
@@ -184,7 +187,9 @@ export function ControlPanelComponent() {
                                     disabled={localPageSize <= 1 || tagsData.error != null}
                                     onClick={() => changeSinglePage(plusOrMinusSigns.minus)}
                                     onMouseDown={() => startPress(750, plusOrMinusSigns.minus, localPageSize)}
-                                    onMouseUp={endPress}>
+                                    onMouseUp={endPress}
+                                    onMouseLeave={() => {if (buttonPressedFlag) {endPress()}}}
+                                    onContextMenu={() => {if (buttonPressedFlag) {endPress()}}}>
                                     <RemoveCircleOutline />
                                 </Button>
                                 <TextField
@@ -203,7 +208,8 @@ export function ControlPanelComponent() {
                                     onClick={() => changeSinglePage(plusOrMinusSigns.plus)}
                                     onMouseDown={() => startPress(750, plusOrMinusSigns.plus, localPageSize)}
                                     onMouseUp={endPress}
-                                >
+                                    onMouseLeave={() => {if (buttonPressedFlag) {endPress()}}}
+                                    onContextMenu={() => {if (buttonPressedFlag) {endPress()}}}>
                                     <AddCircleOutlineIcon />
                                 </Button>
                             </div>

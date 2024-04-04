@@ -12,7 +12,6 @@ export function useFetchData(atom: TagsStateType, setData: React.Dispatch<SetSta
         if (!atom.loading) {
             setData({ ...atom, loading: true, error: null });
         }
-        console.log(endpoint.pagesize)
         const fetchDataAsync = async () => {
             try {
                 const result = await fetchData({
