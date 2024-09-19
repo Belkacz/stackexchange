@@ -1,5 +1,6 @@
-# Preview [click here](https://vercel.com/belkaczs-projects/stackexchange).
-https://vercel.com/belkaczs-projects/stackexchange
+# Preview [click here](https://stackexchange-seven.vercel.app/).
+
+https://stackexchange-seven.vercel.app/
 
 # Getting Started with Create React App
 
