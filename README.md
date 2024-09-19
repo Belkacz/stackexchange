@@ -1,4 +1,4 @@
-# Preview [here]([https://github.com/facebook/create-react-app](https://vercel.com/belkaczs-projects/stackexchange)).
+# Preview [click here](https://vercel.com/belkaczs-projects/stackexchange).
 https://vercel.com/belkaczs-projects/stackexchange
 
 # Getting Started with Create React App
