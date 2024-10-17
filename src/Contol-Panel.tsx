@@ -166,7 +166,7 @@ export function ControlPanelComponent() {
                                         <ArrowUpward sx={{ fontSize: 15 }} />}
                                 </Button>
                             </div>
-                            <div>
+                            <div className='control-panel-buttons'>
                                 <label className="control-label text-style ">Sortowanie:</label>
                                 <Button variant="contained"
                                     sx={boxShadowStyle}
